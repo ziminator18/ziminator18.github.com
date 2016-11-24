@@ -1,0 +1,192 @@
+<!-- HTML Login Page
+Date: Nov. 19, 2016
+Author: ZhiJian Yu
+Title: signInAuth.php
+Description: Webpage which allows user to login to shop at the
+homepage by entering username, email, and password -->
+<!DOCTYPE html>  
+<html>
+	<head>
+		<!-- Since this is a login page, set the page to automatically
+refresh every 30 seconds for user security concerns -->
+		<meta http-equiv="refresh" content="30"
+		http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>
+			Best Shoes Sign In
+		</title>
+	</head>
+	<?php
+// Set the session information
+session_start();
+	?>
+	<style>
+		input[type=text], input[type=password], select {
+			width: 150%;
+			padding: 6px 10px;
+			margin: 8px 0;
+			display: inline-block;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			box-sizing: border-box;
+		}
+		input[type=submit] {
+			width: 150%;
+			background-color: #ffcc66;
+			color: shadow;
+			padding: 6px 10px;
+			margin: 8px 0;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+		}
+		input[type=submit]:hover {
+			background-color: #ffaa00;
+		}
+		input[type=reset] {
+			width: 150%;
+			background-color: #ff6666;
+			color: white;
+			padding: 6px 10px;
+			margin: 8px 0;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+		}
+		input[type=reset]:hover {
+			background-color: #cc0000;
+		}
+		div {
+			/* Set the properties of the overall background
+			of all the textfields and buttons */
+			margin: auto;
+			border-radius: 5px;
+			background-color: #f2f2f2;
+			padding: 20px;
+		}
+		.error {
+			color: #FF0000;
+		}
+	</style>
+	<!-- "Main" is the assigned name of <form> below -->
+	<body OnLoad="document.main.username.focus()">
+		<?php
+// Define variables and initialize to empty values
+$usernameError = $emailError = $signInPassError =
+	$username = $email = $signInPass = "";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+	if (empty($_POST["username"])) {
+		$usernameError = "Username is required";
+	} else {
+		$username = test_input($_POST["username"]);
+	}
+	if (empty($_POST["email"])) {
+		$emailError = "Email is required";
+	} else {
+		$email = test_input($_POST["email"]);
+		// Check if e-mail address is in correct format
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			$emailError = "Invalid email format"; 
+		}
+	}
+	if (empty($_POST["signInPass"])) {
+		$signInPassError = "Sign in Password is required";
+	} else { /* Because stripslashes() function removes all the backslashes,
+if the users inputs backslashes as part of the password, they will be
+deleted before submitting the password entry, so don't call the test_input
+function and use stripslashes() on login password */
+		$signInPass = trim($_POST["signInPass"]);
+		$signInPass = htmlspecialchars($_POST["signInPass"]);
+	}
+}
+function test_input($inputData) {
+	$inputData = trim($inputData);
+	$inputData = stripslashes($inputData);
+	$inputData = htmlspecialchars($inputData);
+	return $inputData;
+} ?>
+		<div>
+			<!-- Be sure to assign a name to <form> in order for the
+above OnLoad=.focus() function to work -->
+			<form name="main" method="post" action="homepage.php"
+			style="font-family: arial; font-size: 14px">
+				<table align="center">
+					<tr>
+						<td style="font-size: 200%">
+							Sign in
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<!-- Intentionally add extra empty table cell to add
+gap between "Sign in" and "Username" -->
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>
+								Username
+							</b>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<!-- Alternately autofocus can be added in any of the
+<input> below to set focus to the specified textfield element -->
+							<input type="text" name="username">
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<span class="error"><?php echo $usernameError;?></span>
+						</td>
+					</tr>
+					<br>
+					<tr>
+						<td>
+							<b>
+								Email
+							</b>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="text" name="email">
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<span class="error"><?php echo $emailError;?></span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>
+								Password
+							</b>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="password" name="signInPass">
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<span class="error"><?php echo $signInPassError;?></span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="submit" name="submitButton" value="Sign in">
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="reset" name="resetButton" value="CLEAR">
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</body>
+</html>
